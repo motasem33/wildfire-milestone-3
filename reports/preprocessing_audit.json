@@ -1,0 +1,33 @@
+{
+  "source_rows": 14988,
+  "analysis_rows": 14610,
+  "excluded_rows": 378,
+  "analysis_start": "1984-01-01",
+  "analysis_end": "2023-12-31",
+  "split_date": "2016-01-01",
+  "train_rows": 11688,
+  "test_rows": 2922,
+  "train_positive": 3627,
+  "test_positive": 1344,
+  "train_positive_rate": 0.3103182751540041,
+  "test_positive_rate": 0.459958932238193,
+  "features": [
+    "PRECIPITATION",
+    "MAX_TEMP",
+    "MIN_TEMP",
+    "AVG_WIND_SPEED",
+    "YEAR",
+    "TEMP_RANGE",
+    "WIND_TEMP_RATIO",
+    "MONTH",
+    "LAGGED_PRECIPITATION",
+    "LAGGED_AVG_WIND_SPEED",
+    "DAY_OF_YEAR",
+    "SEASON_Fall",
+    "SEASON_Spring",
+    "SEASON_Summer",
+    "SEASON_Winter"
+  ],
+  "train_missing_after_transform": 0,
+  "test_missing_after_transform": 0
+}

@@ -1,0 +1,15 @@
+column,type,description
+DATE,Date,"Daily observation date; used only for ordering/splitting, not as a model input."
+PRECIPITATION,Numeric,"Daily precipitation, inches."
+MAX_TEMP,Numeric,"Daily maximum temperature, degrees Fahrenheit."
+MIN_TEMP,Numeric,"Daily minimum temperature, degrees Fahrenheit."
+AVG_WIND_SPEED,Numeric,"Daily average wind speed, mph."
+FIRE_START_DAY,Boolean target,Whether a wildfire start was recorded on that day.
+YEAR,Numeric,Calendar year; retained as a time-trend feature.
+TEMP_RANGE,Numeric,"Daily maximum minus minimum temperature, degrees Fahrenheit."
+WIND_TEMP_RATIO,Numeric,Average wind speed divided by maximum temperature.
+MONTH,Numeric,Calendar month.
+SEASON,Categorical,"Season category: Winter, Spring, Summer, Fall."
+LAGGED_PRECIPITATION,Numeric,"Cumulative precipitation over the preceding seven days, as supplied in source."
+LAGGED_AVG_WIND_SPEED,Numeric,"Average wind speed over the preceding seven days, as supplied in source."
+DAY_OF_YEAR,Numeric,Ordinal day number within the year.
