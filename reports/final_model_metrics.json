@@ -1,0 +1,68 @@
+{
+  "selection_rule": "Highest mean time-series cross-validation average precision across all candidates, including the majority baseline. The winning CV score is a selection score, not an unbiased estimate.",
+  "decision_threshold": 0.5,
+  "threshold_note": "Prespecified default cutoff; precision, recall, F1, and confusion matrix are threshold-dependent.",
+  "score_note": "Classifier scores are not calibrated fire-risk probabilities.",
+  "test_use_note": "Final test metrics are reported once after selection. Permutation importance is an exploratory post-selection diagnostic and must not be used to revise the model against this same test set.",
+  "selected_model": "Logistic Regression",
+  "training_rows": 11688,
+  "training_period": [
+    "1984-01-01",
+    "2015-12-31"
+  ],
+  "test_rows": 2922,
+  "test_period": [
+    "2016-01-01",
+    "2023-12-31"
+  ],
+  "positive_rate_train": 0.3103182751540041,
+  "positive_rate_test": 0.459958932238193,
+  "positive_rate_change_percentage_points": 14.96406570841889,
+  "test_metrics": {
+    "accuracy": 0.7166324435318275,
+    "balanced_accuracy": 0.727988355513308,
+    "precision": 0.641602634467618,
+    "recall": 0.8697916666666666,
+    "f1": 0.7384712571067593,
+    "roc_auc": 0.8386520007242441,
+    "average_precision": 0.7973229702862599
+  },
+  "confusion_matrix_labels_0_1": [
+    [
+      925,
+      653
+    ],
+    [
+      175,
+      1169
+    ]
+  ],
+  "classification_report": {
+    "No recorded fire start": {
+      "precision": 0.8409090909090909,
+      "recall": 0.5861850443599493,
+      "f1-score": 0.6908140403286034,
+      "support": 1578.0
+    },
+    "Recorded fire start": {
+      "precision": 0.641602634467618,
+      "recall": 0.8697916666666666,
+      "f1-score": 0.7384712571067593,
+      "support": 1344.0
+    },
+    "accuracy": 0.7166324435318275,
+    "macro avg": {
+      "precision": 0.7412558626883545,
+      "recall": 0.727988355513308,
+      "f1-score": 0.7146426487176814,
+      "support": 2922.0
+    },
+    "weighted avg": {
+      "precision": 0.749236306016093,
+      "recall": 0.7166324435318275,
+      "f1-score": 0.712734402871328,
+      "support": 2922.0
+    }
+  },
+  "cross_validation_splits": 5
+}
