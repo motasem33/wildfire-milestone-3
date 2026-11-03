@@ -11,6 +11,7 @@ The project now uses the California Weather and Fire Prediction Dataset (1984–
 - `run_milestone3.py`: one-file script that regenerates the analysis plots, model-ready split, pipeline, and audit report.
 - `run_milestone4.py`: reproducible model comparison, five-fold expanding time-series validation, selected-model holdout evaluation, predictions, and permutation-importance diagnostics.
 - `notebooks/03_model_training_and_evaluation.ipynb`: guided notebook for running and reviewing the Milestone 4 model pipeline.
+- `notebooks/04_final_project_demo_day.ipynb`: English-language final-project walkthrough with explanations, runnable code, rendered plots, CV comparison, held-out metrics, and limitations; it complements rather than copies the EDA notebook.
 - `data/processed/california_wildfire_1984_2023.csv`: analysis-window source rows before imputation.
 - `data/model_ready/`: numeric `X_train`/`X_test`, separate targets and dates, and the fitted preprocessing pipeline.
 - `visuals/`: source-based plots used in the notebooks and presentation.
