@@ -1,6 +1,6 @@
 # Wildfire Analysis Dashboard
 
-An Arabic Flask dashboard for the California wildfire classification project. It uses the project's real analysis dataset, cross-validation report, selected-model holdout predictions, and feature-importance report.
+An English Flask dashboard for the California wildfire classification project. It uses the project's real analysis dataset, cross-validation report, selected-model holdout predictions, and feature-importance report.
 
 ## Run locally
 

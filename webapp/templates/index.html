@@ -1,123 +1,124 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#152524">
-  <title>لوحة تحليل حرائق الغابات | مشروع Demo Day</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+  <meta name="description" content="An interactive wildfire analysis dashboard exploring California fire-start records, weather patterns, and chronological model evaluation.">
+  <title>Wildfire Field Analytics | Demo Day</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css', v='2') }}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
-      <a class="brand" href="#top" aria-label="لوحة تحليل حرائق الغابات">
+      <a class="brand" href="#top" aria-label="Wildfire Field Analytics">
         <span class="brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3C17 11 8 15 9 24c1 8 6 12 12 12 8 0 13-6 12-14-1-6-6-11-13-19Z" fill="none" stroke="currentColor" stroke-width="2.3"/><path d="M20 19c-1 4-5 5-4 10 .6 3 2.5 5 5 5 4 0 6-3 5-7-.5-3-3-5-6-8Z" fill="currentColor" opacity=".72"/></svg></span>
         <span><strong>WILDFIRE</strong><small>FIELD ANALYTICS</small></span>
       </a>
-      <div class="side-caption">مساحة المشروع</div>
-      <nav class="side-nav" aria-label="التنقل">
-        <a class="nav-link active" href="#overview"><span class="nav-index">01</span> نظرة عامة</a>
-        <a class="nav-link" href="#explore"><span class="nav-index">02</span> استكشاف البيانات</a>
-        <a class="nav-link" href="#models"><span class="nav-index">03</span> مقارنة النماذج</a>
-        <a class="nav-link" href="#evaluation"><span class="nav-index">04</span> تقييم الاختبار</a>
-        <a class="nav-link" href="#method"><span class="nav-index">05</span> المنهجية والقيود</a>
+      <div class="side-caption">PROJECT WORKSPACE</div>
+      <nav class="side-nav" aria-label="Dashboard navigation">
+        <a class="nav-link active" href="#overview"><span class="nav-index">01</span> Overview</a>
+        <a class="nav-link" href="#explore"><span class="nav-index">02</span> Data exploration</a>
+        <a class="nav-link" href="#models"><span class="nav-index">03</span> Model comparison</a>
+        <a class="nav-link" href="#evaluation"><span class="nav-index">04</span> Holdout evaluation</a>
+        <a class="nav-link" href="#method"><span class="nav-index">05</span> Method & limitations</a>
       </nav>
       <div class="sidebar-bottom">
         <span class="status-dot"></span>
-        <div><strong>مصدر البيانات محمّل</strong><small>1984 — 2023 · California</small></div>
+        <div><strong>Dataset ready</strong><small>CALIFORNIA · 1984–2023</small></div>
       </div>
     </aside>
 
     <main class="main-content" id="top">
       <header class="topbar">
-        <div class="breadcrumb"><span>المشروع النهائي</span><span class="crumb-sep">/</span><strong>لوحة التحليل</strong></div>
-        <div class="topbar-meta"><span class="live-pill"><i></i> تحليل تفاعلي</span><span class="top-date">Demo Day · 2026</span></div>
+        <div class="breadcrumb"><span>Final project</span><span class="crumb-sep">/</span><strong>Analysis dashboard</strong></div>
+        <div class="topbar-meta"><span class="live-pill"><i></i> Interactive analysis</span><span class="top-date">DEMO DAY · 2026</span></div>
       </header>
 
       <section class="hero" id="overview">
         <div class="hero-copy">
           <div class="eyebrow"><span class="eyebrow-line"></span> CALIFORNIA · WILDFIRE STUDY</div>
-          <h1>قراءة أوضح<br><em>لبدايات الحرائق.</em></h1>
-          <p>استكشاف يومي لسجلات الطقس والحرائق، ثم مقارنة زمنية للنماذج ونتائج اختبار على فترة لاحقة.</p>
+          <h1>A clearer view<br><em>of fire starts.</em></h1>
+          <p>Explore daily weather and fire-start records, compare models using chronological validation, and review performance on a later holdout period.</p>
         </div>
         <div class="hero-note">
-          <span class="note-label">سؤال المشروع</span>
-          <p>هل تساعد مؤشرات الطقس اليومية في تصنيف يوم سُجلت فيه بداية حريق؟</p>
-          <span class="note-foot">تصنيف تاريخي · ليس إنذارًا مبكرًا مثبتًا</span>
+          <span class="note-label">PROJECT QUESTION</span>
+          <p>Can daily weather indicators help classify a day with a recorded wildfire start?</p>
+          <span class="note-foot">Historical classification · not a validated early-warning system</span>
         </div>
       </section>
 
-      <section class="filter-panel" aria-label="مرشحات التحليل">
-        <div class="filter-title"><span class="filter-icon">⌕</span><div><strong>تصفية فترة التحليل</strong><small>تتحدث الرسوم أدناه حسب اختياراتك</small></div></div>
-        <label class="filter-control"><span>من سنة</span><input id="fromYear" type="number" min="{{ min_year }}" max="{{ max_year }}" value="{{ min_year }}"></label>
-        <label class="filter-control"><span>إلى سنة</span><input id="toYear" type="number" min="{{ min_year }}" max="{{ max_year }}" value="{{ max_year }}"></label>
-        <label class="filter-control season-control"><span>الموسم</span><select id="season"><option value="all">كل المواسم</option><option value="Winter">الشتاء</option><option value="Spring">الربيع</option><option value="Summer">الصيف</option><option value="Fall">الخريف</option></select></label>
-        <button class="button button-primary" id="applyFilters">تطبيق الفلاتر <span>←</span></button>
-        <a class="button button-quiet" id="downloadLink" href="/download/filtered.csv">تنزيل CSV</a>
+      <section class="filter-panel" aria-label="Analysis filters">
+        <div class="filter-title"><span class="filter-icon">⌕</span><div><strong>Filter the analysis</strong><small>Charts and summaries update to match</small></div></div>
+        <label class="filter-control"><span>From year</span><input id="fromYear" type="number" min="{{ min_year }}" max="{{ max_year }}" value="{{ min_year }}"></label>
+        <label class="filter-control"><span>To year</span><input id="toYear" type="number" min="{{ min_year }}" max="{{ max_year }}" value="{{ max_year }}"></label>
+        <label class="filter-control season-control"><span>Season</span><select id="season"><option value="all">All seasons</option><option value="Winter">Winter</option><option value="Spring">Spring</option><option value="Summer">Summer</option><option value="Fall">Fall</option></select></label>
+        <button class="button button-primary" id="applyFilters">Apply filters <span>→</span></button>
+        <a class="button button-quiet" id="downloadLink" href="/download/filtered.csv">Download CSV</a>
       </section>
 
-      <section class="kpi-grid" aria-label="مؤشرات ملخصة">
-        <article class="kpi-card kpi-dark"><div class="kpi-head"><span>أيام ضمن الاختيار</span><span class="kpi-mark">01</span></div><strong id="daysKpi">—</strong><small id="rangeKpi">—</small></article>
-        <article class="kpi-card"><div class="kpi-head"><span>أيام بداية حريق مسجلة</span><span class="kpi-mark">02</span></div><strong id="eventsKpi">—</strong><small>وفق الوسم الموجود في البيانات</small></article>
-        <article class="kpi-card"><div class="kpi-head"><span>نسبة الأيام الموسومة</span><span class="kpi-mark">03</span></div><strong id="rateKpi">—</strong><small>ضمن الفترة والموسم المحددين</small></article>
-        <article class="kpi-card kpi-outline"><div class="kpi-head"><span>حجم المصدر</span><span class="kpi-mark">04</span></div><strong>{{ '{:,}'.format(total_days) }}</strong><small>سجل يومي · 1984–2023</small></article>
+      <section class="kpi-grid" aria-label="Summary indicators">
+        <article class="kpi-card kpi-dark"><div class="kpi-head"><span>Days in selection</span><span class="kpi-mark">01</span></div><strong id="daysKpi">—</strong><small id="rangeKpi">—</small></article>
+        <article class="kpi-card"><div class="kpi-head"><span>Recorded fire-start days</span><span class="kpi-mark">02</span></div><strong id="eventsKpi">—</strong><small>As labeled in the source data</small></article>
+        <article class="kpi-card"><div class="kpi-head"><span>Positive-label rate</span><span class="kpi-mark">03</span></div><strong id="rateKpi">—</strong><small>Within the selected period and season</small></article>
+        <article class="kpi-card kpi-outline"><div class="kpi-head"><span>Analysis dataset</span><span class="kpi-mark">04</span></div><strong>{{ '{:,}'.format(total_days) }}</strong><small>Daily records · 1984–2023</small></article>
       </section>
 
       <section class="section-block" id="explore">
-        <div class="section-heading"><div><div class="eyebrow">01 / EXPLORATION</div><h2>ما الأنماط التي تظهر في السجلات؟</h2></div><p>ارتباطات وصفية داخل مجموعة البيانات، لا استنتاجات سببية.</p></div>
+        <div class="section-heading"><div><div class="eyebrow">01 / EXPLORATION</div><h2>What patterns appear in the records?</h2></div><p>Descriptive associations within this dataset, not causal findings.</p></div>
         <div class="chart-card chart-wide">
-          <div class="chart-header"><div><h3>أيام بداية الحريق حسب السنة</h3><p>الأعمدة = عدد الأيام الموسومة · الخط = النسبة من أيام السنة</p></div><span class="chart-tag">زمني</span></div>
-          <div class="chart-wrap chart-timeline"><canvas id="yearChart" aria-label="مخطط الحرائق المسجلة حسب السنة"></canvas></div>
+          <div class="chart-header"><div><h3>Recorded fire-start days by year</h3><p>Bars = labeled days · line = share of observations in each year</p></div><span class="chart-tag">TIME SERIES</span></div>
+          <div class="chart-wrap chart-timeline"><canvas id="yearChart" aria-label="Recorded fire-start days by year"></canvas></div>
         </div>
         <div class="chart-grid">
-          <div class="chart-card"><div class="chart-header"><div><h3>النسبة حسب الموسم</h3><p>معدل الوسم الإيجابي داخل الموسم</p></div><span class="chart-tag">موسمية</span></div><div class="chart-wrap chart-small"><canvas id="seasonChart"></canvas></div></div>
-          <div class="chart-card"><div class="chart-header"><div><h3>النسبة حسب الحرارة القصوى</h3><p>شرائح ثابتة لتسهيل المقارنة</p></div><span class="chart-tag">حرارة</span></div><div class="chart-wrap chart-small"><canvas id="tempChart"></canvas></div></div>
+          <div class="chart-card"><div class="chart-header"><div><h3>Positive-label rate by season</h3><p>Share of days labeled positive within each season</p></div><span class="chart-tag">SEASONAL</span></div><div class="chart-wrap chart-small"><canvas id="seasonChart"></canvas></div></div>
+          <div class="chart-card"><div class="chart-header"><div><h3>Positive-label rate by maximum temperature</h3><p>Fixed temperature bands for comparison</p></div><span class="chart-tag">WEATHER</span></div><div class="chart-wrap chart-small"><canvas id="tempChart"></canvas></div></div>
         </div>
         <div class="table-card">
-          <div class="table-heading"><div><h3>عينة من السجلات المحددة</h3><p>آخر عشرة أيام ضمن الفترة المختارة</p></div><span class="table-count" id="tableCount">10 صفوف</span></div>
-          <div class="table-scroll"><table><thead><tr><th>التاريخ</th><th>الموسم</th><th>العظمى °F</th><th>الصغرى °F</th><th>الرياح</th><th>الهطول</th><th>الوسم</th></tr></thead><tbody id="dataRows"><tr><td colspan="7" class="empty-state">جارٍ تحميل البيانات…</td></tr></tbody></table></div>
+          <div class="table-heading"><div><h3>Sample of selected records</h3><p>Most recent ten days within the selected filters</p></div><span class="table-count" id="tableCount">10 rows</span></div>
+          <div class="table-scroll"><table><thead><tr><th>Date</th><th>Season</th><th>High °F</th><th>Low °F</th><th>Wind</th><th>Precipitation</th><th>Label</th></tr></thead><tbody id="dataRows"><tr><td colspan="7" class="empty-state">Loading records…</td></tr></tbody></table></div>
         </div>
       </section>
 
       <section class="section-block" id="models">
-        <div class="section-heading"><div><div class="eyebrow">02 / MODEL SELECTION</div><h2>مقارنة زمنية عادلة للنماذج</h2></div><p>5 طيات متوسعة على بيانات التدريب فقط · مقياس الاختيار: Average Precision.</p></div>
+        <div class="section-heading"><div><div class="eyebrow">02 / MODEL SELECTION</div><h2>Chronological model comparison</h2></div><p>Five expanding-window folds on training data · selection metric: Average Precision.</p></div>
         <div class="model-layout">
-          <div class="chart-card model-chart-card"><div class="chart-header"><div><h3>متوسط AP عبر طيات التحقق</h3><p>المتوسط مع الانحراف المعياري موضح أدناه</p></div><span class="chart-tag">5 طيات زمنية</span></div><div class="chart-wrap chart-model"><canvas id="modelChart"></canvas></div><div class="model-details" id="modelDetails"></div></div>
-          <div class="selection-card"><span class="selection-label">النموذج المختار</span><div class="selection-name" id="selectedModel">—</div><div class="selection-rule"><span>قاعدة الاختيار</span><p>أعلى متوسط Average Precision في التحقق الزمني، مع إدراج خط الأساس ضمن المقارنة.</p></div><div class="selection-caveat">الفارق عن Random Forest صغير؛ لا يُعد تفوقًا حاسمًا.</div></div>
+          <div class="chart-card model-chart-card"><div class="chart-header"><div><h3>Average Precision across validation folds</h3><p>Mean score; standard deviation is shown below</p></div><span class="chart-tag">5 TIME-BASED FOLDS</span></div><div class="chart-wrap chart-model"><canvas id="modelChart"></canvas></div><div class="model-details" id="modelDetails"></div></div>
+          <div class="selection-card"><span class="selection-label">SELECTED MODEL</span><div class="selection-name" id="selectedModel">—</div><div class="selection-rule"><span>Selection rule</span><p>Highest mean Average Precision in chronological validation, with the baseline included.</p></div><div class="selection-caveat">The lead over Random Forest is small and should not be treated as decisive.</div></div>
         </div>
       </section>
 
       <section class="section-block" id="evaluation">
-        <div class="section-heading"><div><div class="eyebrow">03 / HOLDOUT EVALUATION</div><h2>كيف يوازن النموذج بين الالتقاط والإنذارات؟</h2></div><p>اختبار زمني لاحق: 2016–2023 · 2,922 يومًا لم تدخل التدريب.</p></div>
+        <div class="section-heading"><div><div class="eyebrow">03 / HOLDOUT EVALUATION</div><h2>How does the model balance detection and false alarms?</h2></div><p>Later chronological holdout: 2016–2023 · 2,922 days not used for training.</p></div>
         <div class="evaluation-layout">
           <div class="evaluation-main">
-            <div class="metric-grid"><article class="metric-tile"><span>Accuracy</span><strong id="accuracyMetric">—</strong></article><article class="metric-tile metric-accent"><span>Recall · حرائق</span><strong id="recallMetric">—</strong></article><article class="metric-tile"><span>Precision · حرائق</span><strong id="precisionMetric">—</strong></article><article class="metric-tile"><span>F1 score</span><strong id="f1Metric">—</strong></article><article class="metric-tile"><span>ROC AUC</span><strong id="aucMetric">—</strong></article><article class="metric-tile"><span>Average Precision</span><strong id="apMetric">—</strong></article></div>
-            <div class="threshold-panel"><div class="threshold-title"><div><h3>استكشف أثر عتبة القرار</h3><p>غيّر العتبة لترى تغيّر أخطاء التصنيف على الاختبار.</p></div><output id="thresholdValue">0.50</output></div><input id="thresholdSlider" type="range" min="0.05" max="0.95" step="0.01" value="0.50" aria-label="عتبة القرار"><div class="range-labels"><span>0.05 · حساسية أعلى</span><span>0.95 · تنبؤات أكثر تحفظًا</span></div><div class="threshold-warning">تحليل استكشافي فقط: لا تختَر عتبة نهائية اعتمادًا على مجموعة الاختبار نفسها.</div></div>
+            <div class="metric-grid"><article class="metric-tile"><span>Accuracy</span><strong id="accuracyMetric">—</strong></article><article class="metric-tile metric-accent"><span>Recall · fire starts</span><strong id="recallMetric">—</strong></article><article class="metric-tile"><span>Precision · fire starts</span><strong id="precisionMetric">—</strong></article><article class="metric-tile"><span>F1 score</span><strong id="f1Metric">—</strong></article><article class="metric-tile"><span>ROC AUC</span><strong id="aucMetric">—</strong></article><article class="metric-tile"><span>Average Precision</span><strong id="apMetric">—</strong></article></div>
+            <div class="threshold-panel"><div class="threshold-title"><div><h3>Explore the decision threshold</h3><p>Adjust the threshold to see how errors change on the holdout.</p></div><output id="thresholdValue">0.50</output></div><input id="thresholdSlider" type="range" min="0.05" max="0.95" step="0.01" value="0.50" aria-label="Decision threshold"><div class="range-labels"><span>0.05 · higher sensitivity</span><span>0.95 · more conservative</span></div><div class="threshold-warning">Exploratory only: do not select a final threshold using the same holdout set.</div></div>
           </div>
-          <div class="matrix-card"><div class="matrix-head"><h3>مصفوفة الالتباس</h3><span>العتبة <b id="matrixThreshold">0.50</b></span></div><div class="matrix-axis"><span></span><span>تنبؤ: لا حريق</span><span>تنبؤ: حريق</span></div><div class="matrix-row"><span class="matrix-row-label">فعلي: لا حريق</span><strong class="matrix-cell cell-tn" id="tnCell">—</strong><strong class="matrix-cell cell-fp" id="fpCell">—</strong></div><div class="matrix-row"><span class="matrix-row-label">فعلي: حريق</span><strong class="matrix-cell cell-fn" id="fnCell">—</strong><strong class="matrix-cell cell-tp" id="tpCell">—</strong></div><div class="matrix-legend"><span><i class="legend-good"></i>صحيح</span><span><i class="legend-error"></i>خطأ</span></div></div>
+          <div class="matrix-card"><div class="matrix-head"><h3>Confusion matrix</h3><span>Threshold <b id="matrixThreshold">0.50</b></span></div><div class="matrix-axis"><span></span><span>Predicted: no fire</span><span>Predicted: fire</span></div><div class="matrix-row"><span class="matrix-row-label">Actual: no fire</span><strong class="matrix-cell cell-tn" id="tnCell">—</strong><strong class="matrix-cell cell-fp" id="fpCell">—</strong></div><div class="matrix-row"><span class="matrix-row-label">Actual: fire start</span><strong class="matrix-cell cell-fn" id="fnCell">—</strong><strong class="matrix-cell cell-tp" id="tpCell">—</strong></div><div class="matrix-legend"><span><i class="legend-good"></i>Correct</span><span><i class="legend-error"></i>Error</span></div></div>
         </div>
       </section>
 
       <section class="section-block diagnostics-section">
-        <div class="section-heading"><div><div class="eyebrow">04 / MODEL DIAGNOSTICS</div><h2>ما الذي اعتمد عليه النموذج؟</h2></div><p>Permutation importance على عينة الاختبار؛ تشخيص للاعتماد التنبؤي وليس سببًا للحريق.</p></div>
-        <div class="chart-card"><div class="chart-header"><div><h3>أهمية الميزات بالتبديل</h3><p>انخفاض Average Precision عند خلط كل ميزة</p></div><span class="chart-tag">تشخيصي</span></div><div class="chart-wrap chart-importance"><canvas id="featureChart"></canvas></div></div>
+        <div class="section-heading"><div><div class="eyebrow">04 / MODEL DIAGNOSTICS</div><h2>Which features did the model rely on?</h2></div><p>Permutation importance on a test sample; predictive reliance is not a cause of wildfire.</p></div>
+        <div class="chart-card"><div class="chart-header"><div><h3>Permutation feature importance</h3><p>Change in Average Precision after shuffling one feature</p></div><span class="chart-tag">DIAGNOSTIC</span></div><div class="chart-wrap chart-importance"><canvas id="featureChart"></canvas></div></div>
       </section>
 
       <section class="section-block" id="method">
-        <div class="section-heading"><div><div class="eyebrow">05 / METHOD & LIMITS</div><h2>قرارات منهجية يجب أن تبقى واضحة</h2></div></div>
+        <div class="section-heading"><div><div class="eyebrow">05 / METHOD & LIMITATIONS</div><h2>Methodological decisions to keep in view</h2></div></div>
         <div class="method-grid">
-          <article class="method-card"><span class="method-number">01</span><h3>تغطية الوسوم</h3><p>استُبعدت 378 ملاحظة من 2024 وأول 12 يومًا من 2025 لأن الوسوم المتاحة كلها سلبية؛ اعتُبر ذلك احتمال فجوة تغطية، لا دليلًا على عدم وقوع حرائق.</p></article>
-          <article class="method-card"><span class="method-number">02</span><h3>منع التسرب الزمني</h3><p>أُعيد بناء ملخصات الطقس السابقة باستخدام <code>shift(1)</code>، وأُجريت المعالجة داخل خطوط التدريب والتحقق فقط.</p></article>
-          <article class="method-card"><span class="method-number">03</span><h3>نطاق الاستخدام</h3><p>يستخدم المشروع طقس اليوم نفسه لتصنيف اليوم نفسه؛ لذلك لا يثبت القدرة على التنبؤ قبل الحدث أو تقديم إنذار مبكر.</p></article>
-          <article class="method-card method-alert"><span class="method-number">04</span><h3>تغير زمني</h3><p>ارتفعت نسبة الوسوم الإيجابية من 31% تقريبًا في التدريب إلى 46% في الاختبار، ما يحد من التعميم المباشر إلى المستقبل.</p></article>
+          <article class="method-card"><span class="method-number">01</span><h3>Label coverage</h3><p>We excluded 378 observations from 2024 and the first 12 days of 2025 because all available labels were negative. This may indicate incomplete coverage; it does not prove that no fires occurred.</p></article>
+          <article class="method-card"><span class="method-number">02</span><h3>Temporal leakage control</h3><p>Previous-weather summaries were rebuilt using <code>shift(1)</code>. Preprocessing was fitted inside each training and validation pipeline.</p></article>
+          <article class="method-card"><span class="method-number">03</span><h3>Scope of use</h3><p>The model uses same-day weather to classify a same-day label. It does not establish pre-event prediction or operational early-warning capability.</p></article>
+          <article class="method-card method-alert"><span class="method-number">04</span><h3>Temporal distribution shift</h3><p>The positive-label rate rises from about 31% in training to 46% in the holdout, which limits direct generalization to future periods.</p></article>
         </div>
       </section>
 
-      <footer class="page-footer"><span>WILDFIRE FIELD ANALYTICS</span><span>مصادر البيانات: NOAA · CAL FIRE · California</span><span>مشروع Demo Day</span></footer>
+      <footer class="page-footer"><span>WILDFIRE FIELD ANALYTICS</span><span>Data sources: NOAA · CAL FIRE · California</span><span>Final project · Demo Day</span></footer>
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+  <script src="{{ url_for('static', filename='dashboard.js', v='2') }}"></script>
 </body>
 </html>
