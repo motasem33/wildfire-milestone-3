@@ -33,5 +33,8 @@ Four classifiers are compared: a majority-class baseline, balanced Logistic Regr
 ## Run
 From the project root, run `python run_milestone3.py` to regenerate preprocessing/EDA outputs, then `python run_milestone4.py` to train and evaluate the model candidates. To open the interactive dashboard, install `requirements.txt`, then run `python webapp/app.py` and open `http://127.0.0.1:5000`. Alternatively, open the notebooks in Jupyter and run them in order. The notebooks discover the project root from the current folder.
 
+## Render deployment
+The repository includes `render.yaml` and a minimal `webapp/requirements.txt` for deploying the Flask dashboard as a Render web service. It uses Python 3.12, Gunicorn, a `/health` check, and automatic deployment from `main`. The Free plan keeps a stable public URL but spins down after 15 minutes without traffic and can take about a minute to wake. Render describes Free services as suitable for demos and hobby projects, not production-critical services. This dashboard is read-only and loads its source data from tracked repository files, so it does not depend on persistent filesystem writes.
+
 ## Source and attribution
 Yavas, Cemil Emre; Kadlec, Christopher; Kim, Jongyeop; Chen, Lei. *California Weather and Fire Prediction Dataset (1984–2025) with Engineered Features*. Zenodo (2025). DOI: https://doi.org/10.5281/zenodo.14712845. License: Creative Commons Attribution 4.0 International. The record describes weather sourced from NOAA Climate Data Online and wildfire incidents from CAL FIRE.

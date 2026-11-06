@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: wildfire-field-analytics
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: pip install -r webapp/requirements.txt
+    startCommand: gunicorn --chdir webapp --workers 1 --threads 2 --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /health
+    autoDeploy: true
